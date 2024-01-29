@@ -23,6 +23,6 @@ jobs:
 
       - name: 'Build Inventory Image'
         run: |
-          docker build . --tag ghcr.io/<your-GitHub-username>/store:latest
+          docker build . --tag ghcr.io/harmoniemand/unquomment:latest
           docker push ghcr.io/harmoniemand/unquomment:latest
         
