@@ -1,0 +1,28 @@
+name: Publish Image to Github Container Registry
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./docker
+    steps:
+      - name: 'Checkout Github Action'
+        uses: actions/checkout@v2
+
+      - name: 'Login to Github Container Registry'
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 'Build Inventory Image'
+        run: |
+          docker build . --tag ghcr.io/<your-GitHub-username>/store:latest
+          docker push ghcr.io/harmoniemand/unquomment:latest
+        
