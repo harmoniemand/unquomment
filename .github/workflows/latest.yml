@@ -1,8 +1,9 @@
 name: Build and Publish Docker Image
 
 on:
-  release:
-    types: [created]  # Trigger on new releases
+  push:
+    branches:
+      - main  # Trigger on pushes to the main branch
 
 jobs:
   build-and-push:
@@ -26,7 +27,7 @@ jobs:
       uses: docker/build-push-action@v2
       with:
         push: true
-        tags: ghcr.io/${{ github.repository }}:${{ github.ref_name }}
+        tags: ghcr.io/${{ github.repository }}:latest
 
     - name: Image digest
       run: echo ${{ steps.build-and-push.outputs.digest }}
