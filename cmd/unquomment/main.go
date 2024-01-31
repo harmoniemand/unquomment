@@ -36,7 +36,18 @@ func main() {
 	port := 8080
 
 	r := chi.NewRouter()
+
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		ctx := r.Context()
+
+		w.WriteHeader(http.StatusOK)
+		_, err := w.Write([]byte("Hello World"))
+		if err != nil {
+			slog.ErrorContext(ctx, "Error writing response: %v", err)
+		}
+	})
+
+	r.Get("/comment", func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
 
 		cr := CommentRequest{
