@@ -15,4 +15,5 @@ COPY --from=root-certs /etc/group /etc/group
 COPY --chown=1001:10001 --from=root-certs /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --chown=1001:10001 --from=builder /app/bin/ /app
 USER app
+EXPOSE 8080
 ENTRYPOINT [ "/app" ]
