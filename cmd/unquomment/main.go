@@ -64,6 +64,8 @@ func main() {
 			return
 		}
 
+		lastRequest = time.Now()
+
 		cr := CommentRequest{
 			Topic:      r.URL.Query().Get("topic"),
 			Sexism:     r.URL.Query().Get("sexism"),
