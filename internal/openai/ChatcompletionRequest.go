@@ -79,6 +79,7 @@ type Model string
 const (
 	ModelGpt4VisionPreview Model = "gpt-4-vision-preview"
 	ModelGpt4TurboPreview  Model = "gpt-4-0125-preview"
+	ModelGpt35Turbo0125    Model = "gpt-3.5-turbo-0125"
 )
 
 func (m Model) MarshalJSON() ([]byte, error) {

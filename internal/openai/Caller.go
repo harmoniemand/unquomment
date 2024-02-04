@@ -15,7 +15,7 @@ func Call(promt string, ctx context.Context) (string, error) {
 	oai_api_key := os.Getenv("OAI_API_KEY")
 
 	oaiRequest := ChatcompletionRequest{
-		Model:     ModelGpt4TurboPreview,
+		Model:     ModelGpt35Turbo0125,
 		MaxTokens: 300,
 		Messages: []Message{
 			{
