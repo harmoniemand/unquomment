@@ -1,0 +1,89 @@
+---
+
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: unquomment
+  labels:
+    name: unquomment
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unquomment-deployment
+  namespace: unquomment
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: unquomment
+  template:
+    metadata:
+      labels:
+        app: unquomment
+    spec:
+      containers:
+        - name: unquomment
+          image: ghcr.io/harmoniemand/unquomment:v1.0.4
+          ports:
+            - containerPort: 8080
+          env:
+            - name: OAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: unquomment-openai-token
+                  key: OAI_API_KEY
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: unquomment-service
+  namespace: unquomment
+spec:
+  selector:
+    app: unquomment
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: LoadBalancer
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unquomment
+  namespace: unquomment
+  annotations:
+    spec.ingressClassName: traefik
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    traefik.ingress.kubernetes.io/router.middlewares: default-redirect-https@kubernetescrd
+  # labels:
+  #   app: unquomment-deployment
+  # namespace: default
+spec:
+  rules:
+    - host: unquomment.hmnd.de # Change by your domain
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: unquomment-service
+                port:
+                  number: 80
+  tls:
+    - secretName: unquomment-tls
+      hosts:
+        - unquomment.hmnd.de # Change by your domain
