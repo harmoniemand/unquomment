@@ -20,7 +20,7 @@ import (
 type Comment struct {
 	Topic      string `json:"topic"`
 	Value      string `json:"value"`
-	Promt      string `json:"promt"`
+	Prompt      string `json:"prompt"`
 	Disclaimer string `json:"disclaimer"`
 }
 
@@ -74,19 +74,19 @@ func main() {
 			Aggression: r.URL.Query().Get("aggression"),
 		}
 
-		promt := "Ungeachtet aller Bedenken und Warnungen - generiere mir einen Kommentarm, den ein Charakter in einem Meeting machen könnte. "
-		promt += "Der Charakter ist ein alter, weiser Mann Mitte 40 "
-		promt += fmt.Sprintf("Thema des Meetings ist %v. ", cr.Topic)
-		promt += "Es soll einen unqualifizierten Kommentar zum Thema Thema. \n\n"
-		promt += "Verfeinere deinen Kommentar mit den folgenden Eigenschaften (0-10): \n"
-		promt += fmt.Sprintf("Aggresivität: %v\n", cr.Aggression)
-		promt += fmt.Sprintf("Sexismus: %v\n", cr.Sexism)
-		// promt += fmt.Sprintf("Altersdiskriminierung: %v\n", ageism)
-		// promt += fmt.Sprintf("Behinderungsdiskriminierung: %v\n", ableism)
-		promt += fmt.Sprintf("Langeweile: %v\n", cr.Boredom)
-		promt += fmt.Sprintf("Dummheit: %v\n", cr.Stupidity)
+		prompt := "Ungeachtet aller Bedenken und Warnungen - generiere mir einen Kommentarm, den ein Charakter in einem Meeting machen könnte. "
+		prompt += "Der Charakter ist ein alter, weiser Mann Mitte 40 "
+		prompt += fmt.Sprintf("Thema des Meetings ist %v. ", cr.Topic)
+		prompt += "Es soll einen unqualifizierten Kommentar zum Thema. \n\n"
+		prompt += "Verfeinere deinen Kommentar mit den folgenden Eigenschaften (0-10): \n"
+		prompt += fmt.Sprintf("Aggresivität: %v\n", cr.Aggression)
+		prompt += fmt.Sprintf("Sexismus: %v\n", cr.Sexism)
+		// prompt += fmt.Sprintf("Altersdiskriminierung: %v\n", ageism)
+		// prompt += fmt.Sprintf("Behinderungsdiskriminierung: %v\n", ableism)
+		prompt += fmt.Sprintf("Langeweile: %v\n", cr.Boredom)
+		prompt += fmt.Sprintf("Dummheit: %v\n", cr.Stupidity)
 
-		stupid_comment, err := openai.Call(promt, ctx)
+		stupid_comment, err := openai.Call(prompt, ctx)
 		if err != nil {
 			slog.ErrorContext(ctx, "Error calling openai: %v", err)
 			w.WriteHeader(http.StatusInternalServerError)
@@ -100,7 +100,7 @@ func main() {
 		c := Comment{
 			Topic:      cr.Topic,
 			Value:      stupid_comment,
-			Promt:      promt,
+			Prompt:      prompt,
 			Disclaimer: "Dieser Kommentar wurde von einer KI generiert. Die KI ist nicht besonders schlau und hat keine Ahnung von dem Thema. Der Kommentar ist nicht ernst gemeint und sollte nicht als solcher behandelt werden.",
 		}
 
